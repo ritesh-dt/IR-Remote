@@ -1,0 +1,234 @@
+<LayoutIconButton>:
+	size_hint: None, None
+	size: 30, 30
+	user_font_size: 64
+
+<OneLineItemDrawer>:
+	IconLeftWidget:
+		id: icon
+		icon: root.icon
+<TwoLineItemDrawer>:
+	nav_drawer: None
+	remoteId: -1
+	on_press:
+		app.transition("Remote", "left", self.secondary_text, root.remoteId)
+		root.nav_drawer.set_state("close")
+	IconLeftWidget:
+		id: icon
+		icon: root.icon
+
+<ContentNavigationDrawer>:
+	ScrollView:
+		MDList:
+			id: md_list
+			OneLineItemDrawer:
+				text: "Add a new remote"
+				icon: "plus"
+				on_press: 
+					app.transition("Add a new remote", "left")
+					root.nav_drawer.set_state("close")
+
+<LayoutMusic>:
+	GridLayout:
+		id: top_layout
+		size_hint: (0.9, 0.2)
+		pos_hint: {"center_x": 0.5, "top":0.95}
+		cols: 4
+		spacing: 10
+		MDFlatButton:
+			size_hint_x: 1/top_layout.cols
+			text: "Power"
+		MDRaisedButton:
+			size_hint_x: 1/top_layout.cols
+			text: "Mode"
+		MDRaisedButton:
+			size_hint_x: 1/top_layout.cols
+			text: "Clock"
+		MDRaisedButton:
+			size_hint_x: 1/top_layout.cols
+			text: "Mute"
+	MDIconButton:
+		icon: "play"
+		pos_hint: {"center_x": 0.5, "center_y":0.5}
+		user_font_size: "36sp"
+	MDIconButton:
+		icon: "arrow-left"
+		pos_hint: {"center_x": 0.3, "center_y":0.5}
+	MDIconButton:
+		icon: "arrow-right"
+		pos_hint: {"center_x": 0.7, "center_y":0.5}
+	MDIconButton:
+		icon: "arrow-up"
+		pos_hint: {"center_x": 0.5, "center_y":0.6}
+	MDIconButton:
+		icon: "arrow-down"
+		pos_hint: {"center_x": 0.5, "center_y":0.4}
+	GridLayout:
+		id: down_layout
+		size_hint: (0.9, 0.2)
+		pos_hint: {"center_x": 0.5, "x":0.05}
+		cols: 4
+		spacing: 10
+		MDRaisedButton:
+			size_hint_x: 1/down_layout.cols
+			text: "Vol+"
+		MDRaisedButton:
+			size_hint_x: 1/down_layout.cols
+			text: "EQ"
+		MDRaisedButton:
+			size_hint_x: 1/down_layout.cols
+			text: "RPT"
+		MDRaisedButton:
+			size_hint_x: 1/down_layout.cols
+			text: "Mute"
+		MDRaisedButton:
+			size_hint_x: 1/down_layout.cols
+			text: "Back"
+
+<LayoutTV>:
+	BoxLayout:
+		pos_hint: {"x":0, "y":0}
+		size_hint: (1, 1)
+		orientation: 'vertical'
+		GridLayout:
+			id: top_layout
+			size_hint: (0.95, 0.1)
+			pos_hint: {"center_x": 0.5, "top":0.9}
+			cols: 4
+			spacing: 10
+			MDFlatButton:
+				size_hint_x: 1/top_layout.cols
+				text: "Power"
+			MDRaisedButton:
+				size_hint_x: 1/top_layout.cols
+				text: "Mute"
+			MDRaisedButton:
+				size_hint_x: 1/top_layout.cols
+				text: "Vol+"
+			MDRaisedButton:
+				size_hint_x: 1/top_layout.cols
+				text: "Vol-"
+		FloatLayout:
+			size_hint: (0.95, 0.35)
+			pos_hint: {"center_x": 0.5}
+			MDRaisedButton:
+				icon: "arrow-up"
+				pos_hint:{'center_x':0.25, 'top':0.95}
+			MDRaisedButton:
+				icon: "arrow-down"
+				pos_hint:{'center_x':0.25, 'y':0.05}
+			MDRaisedButton:
+				icon: "volume-minus"
+				pos_hint:{'center_x': 0.75, 'top': 0.95}
+			MDRaisedButton:
+				icon: "volume-plus"
+				pos_hint:{'center_x': 0.75, 'y': 0.05}
+		GridLayout:
+			pos_hint: {"center_x":0.5, "y":0.5}
+			size_hint_x: None
+			width: self.minimum_width
+			cols: 3
+			padding: 10
+			spacing: 0
+
+			LayoutIconButton:
+				icon: "numeric-1-box"
+			LayoutIconButton:
+				icon: "numeric-2-box"
+			LayoutIconButton:
+				icon: "numeric-3-box"
+			LayoutIconButton:
+				icon: "numeric-4-box"
+			LayoutIconButton:
+				icon: "numeric-5-box"
+			LayoutIconButton:
+				icon: "numeric-6-box"
+			LayoutIconButton:
+				icon: "numeric-7-box"
+			LayoutIconButton:
+				icon: "numeric-8-box"
+			LayoutIconButton:
+				icon: "numeric-9-box"
+			LayoutIconButton:
+				icon: "numeric-0-box"
+			LayoutIconButton:
+				icon: "numeric-0-box"
+			LayoutIconButton:
+				icon: "numeric-0-box"
+
+
+<RootScreenManager>:
+	Screen:
+		MDToolbar:
+			pos_hint: {"top": 1}
+			title: screen_manager.current
+			left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+			size_hint: (1, 0.1)
+			elevation: 0
+
+		NavigationLayout:
+			
+			ScreenManager:
+				id: screen_manager
+				Screen:
+					name: "Home"
+					MDLabel:
+						text: "HomeLAbel"
+				Screen:
+					id: remote_screen
+					name: "Remote"
+				Screen:
+					name: "Add a new remote"	
+					MDLabel:
+						pos_hint: {"x":0.05, "top":0.85}
+						size_hint: (0.4, 0.05)
+						text: "Appliance: "
+						halign: "center"
+					MDDropDownItem:
+						id: appliance_dropdown
+						pos_hint: {"x":0.5, "top":0.85}
+						items: []
+						dropdown_bg: [1, 1, 1, 1]
+						on_select: app.findItems("appliance", self.current_item)
+					MDLabel:
+						pos_hint: {"x":0.05, "top":0.75}
+						size_hint: (0.4, 0.05)
+						text: "Brand: "
+						halign: "center"
+					MDDropDownItem:
+						id: brand_dropdown
+						pos_hint: {"x":0.5, "top":0.75}
+						items: []
+						dropdown_bg: [1, 1, 1, 1]
+						on_select: app.findItems("brand", f"{root.ids.appliance_dropdown.current_item}/{self.current_item}")
+					MDLabel:
+						pos_hint: {"x":0.05, "top":0.65}
+						size_hint: (0.4, 0.05)
+						text: "Model: "
+						halign: "center"
+					MDDropDownItem:
+						id: model_dropdown
+						pos_hint: {"x":0.5, "top":0.65}
+						items: []
+						dropdown_bg: [1, 1, 1, 1]
+					MDLabel:
+						pos_hint: {"x":0.05, "top":0.55}
+						size_hint: (0.4, 0.05)
+						text: "Name: "
+						halign: "center"
+					MDTextField:
+						id: name_field
+						required: True
+						pos_hint: {"x":0.5, "top":0.55}
+					MDRaisedButton:
+						text: "Add"
+						pos_hint: {"center_x":0.5, "top":0.45}
+						on_release: app.findItems("add", f"{root.ids.appliance_dropdown.current_item}/{root.ids.brand_dropdown.current_item}/{root.ids.model_dropdown.current_item}", caption=name_field.text)
+
+			MDNavigationDrawer:
+				id: nav_drawer
+				ContentNavigationDrawer:
+					id: content_nav_drawer
+					nav_drawer: nav_drawer
+
+		
