@@ -4,9 +4,9 @@
 	user_font_size: 64
 
 <MDRaisedButton>:
-	on_press: app.play(self.text)
+	on_release: app.play(self.text)
 <MDFlatButton>:
-	on_press: app.play(self.text)
+	on_release: app.play(self.text)
 
 <OneLineItemDrawer>:
 	IconLeftWidget:
@@ -15,7 +15,7 @@
 <TwoLineItemDrawer>:
 	nav_drawer: None
 	remoteId: -1
-	on_press:
+	on_release:
 		app.transition("Remote", "left", self.secondary_text, root.remoteId)
 		root.nav_drawer.set_state("close")
 	IconLeftWidget:
@@ -29,7 +29,7 @@
 			OneLineItemDrawer:
 				text: "Add a new remote"
 				icon: "plus"
-				on_press: 
+				on_release: 
 					app.transition("Add a new remote", "left")
 					root.nav_drawer.set_state("close")
 
@@ -180,12 +180,17 @@
 
 
 <RootScreenManager>:
+	title: ""
+	currentRemote: -1
+	currentCaption: ""
 	Screen:
+		name: "main_screen"
 		MDToolbar:
 			id: md_toolbar
 			pos_hint: {"top": 1}
-			title: screen_manager.current
+			title: root.title
 			left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+			right_action_items: [["square-edit-outline", lambda x: app.transition("Edit remote details", "right")]] if screen_manager.current ==  'Remote' else [["help", lambda x: None]]
 			size_hint: (1, 0.1)
 			elevation: 0
 
@@ -231,17 +236,50 @@
 						dropdown_bg: [1, 1, 1, 1]
 					MDLabel:
 						pos_hint: {"x":0.05, "top":0.55}
-						size_hint: (0.4, 0.05)
+						size_hint: (0.4, 0.1)
 						text: "Name: "
 						halign: "center"
 					MDTextField:
 						id: name_field
+						size_hint: (0.5, 0.1)
 						required: True
-						pos_hint: {"x":0.5, "top":0.55}
+						pos_hint: {"x":0.45, "top":0.55}
 					MDRaisedButton:
 						text: "Add"
 						pos_hint: {"center_x":0.5, "top":0.45}
 						on_release: app.findItems("add", f"{root.ids.appliance_dropdown.current_item}/{root.ids.brand_dropdown.current_item}/{root.ids.model_dropdown.current_item}", caption=name_field.text)
+
+				Screen:
+					name: "Edit remote details"
+					MDLabel:
+						pos_hint: {"x": 0.05, "top":0.85}
+						size_hint: (0.2, 0.1)
+						text: "Caption: "
+					MDTextField:
+						id: caption_field
+						pos_hint: {"x": 0.25, "top":0.85}
+						size_hint: (0.65, 0.1)
+						multiline: False
+						text: root.currentCaption
+					MDRaisedButton:
+						pos_hint: {"center_x": 0.5, "top":0.75}
+						text: "Save"
+						on_release:
+							app.save(caption_field.text)
+					MDRaisedButton:
+						pos_hint: {"center_x": 0.5, "top":0.6}
+						text: "Delete remote"
+						#md_bg_color: (1, 0, 0)
+						on_release:
+							app.delete_remote()
+
+				Screen:
+					name: "No added remotes..."
+					MDLabel:
+						text: "Please add a remote"
+						halign: "center"
+
+
 
 			MDNavigationDrawer:
 				id: nav_drawer
