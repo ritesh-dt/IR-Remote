@@ -1,5 +1,7 @@
-import kivy
 import os
+os.environ["KIVY_AUDIO"] = "sdl2"
+
+import kivy
 import requests
 from io import BytesIO
 from zipfile import ZipFile
@@ -19,7 +21,7 @@ from kivymd.uix.list import OneLineIconListItem, TwoLineIconListItem
 
 Clock.max_iterations = 20
 DATABASE_URL = "http://127.0.0.1:5000/"
-iconDict = {"AC": "air-conditioner", "TV": "television"}
+iconDict = {"AC": "air-conditioner", "Music Player": "music", "TV": "television"}
 remoteList = []
 
 class OneLineItemDrawer(OneLineIconListItem):
@@ -43,7 +45,7 @@ class LayoutMusic(FloatLayout):
 	def __init__(self, **kwargs):
 		super().__init__(**kwargs)
 
-remoteDict = {"AC": LayoutMusic, "TV": LayoutTV}
+remoteDict = {"AC": LayoutMusic, "Music Player": LayoutMusic, "TV": LayoutTV}
 soundDict = {}
 currentRemote = -1
 
